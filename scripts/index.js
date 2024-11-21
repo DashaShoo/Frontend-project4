@@ -1,6 +1,11 @@
 const cardsContainer = document.querySelector('.places__list');
 const cardTemplate = document.querySelector('#card-template').content;
 
+// Находим элементы поп-апа с картинкой
+const imagePopup = document.querySelector('.popup_type_image');
+const popupImage = imagePopup.querySelector('.popup__image');
+const popupCaption = imagePopup.querySelector('.popup__caption');
+
 // @todo: Функция создания карточки
 function createCard(cardData) {
     const newCard = cardTemplate.cloneNode(true);
@@ -14,10 +19,17 @@ function createCard(cardData) {
     cardImage.alt = cardData.name;
     cardTitle.textContent = cardData.name;
 
+    // Обработчик клика на изображение для открытия поп-апа
+    cardImage.addEventListener('click', () => {
+        popupImage.src = cardData.link; // Устанавливаем источник изображения
+        popupImage.alt = cardData.name; // Устанавливаем alt текст
+        popupCaption.textContent = cardData.name; // Устанавливаем название
+        openModal(imagePopup); // Открываем поп-ап с изображением
+    });
+
     deleteButton.addEventListener('click', (evt) => {
         removeCard(evt);
     });
-
 
     likeButton.addEventListener('click', (evt) => {
         toggleLike(evt);
@@ -25,7 +37,6 @@ function createCard(cardData) {
 
     return newCard;
 }
-
 
 // @todo: Функция удаления карточки
 function removeCard(evt) {
@@ -40,34 +51,26 @@ function toggleLike(evt) {
     likeButton.classList.toggle('card__like-button_is-active');
 }
 
-
 // @todo: Вывести карточки на страницу
 initialCards.forEach(card => {
     const cardElement = createCard(card);
     cardsContainer.append(cardElement); // Добавляем новую карточку в список
 });
 
+// ПОПАПЫ!!!!!!!!!!!!
 
-
-
-
-
-
-//ПОПАПЫ!!!!!!!!!!!!
-  
 const profilePopup = document.querySelector('.popup_type_edit');
 const cardPopup = document.querySelector('.popup_type_new-card');
-const imagePopup = document.querySelector('.popup_type_image');
 
 // Функция для открытия попапа
 function openModal(popup) {
     popup.classList.add('popup_is-opened');
 }
+
 // Функция для закрытия попапа
 function closeModal(popup) {
     popup.classList.remove('popup_is-opened');
 }
-
 
 // Обработчик событий для кнопок закрытия поп-апов
 const closeButtons = document.querySelectorAll('.popup__close');
@@ -88,17 +91,13 @@ popups.forEach(popup => {
     });
 });
 
-
-
-//ФОРМА РЕДАКТИРОВАНИЯ
+// ФОРМА РЕДАКТИРОВАНИЯ
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
-
 
 const profileFormElement = profilePopup.querySelector('.popup__form');
 const nameInput = profileFormElement.querySelector('.popup__input_type_name');
 const jobInput = profileFormElement.querySelector('.popup__input_type_description');
-
 
 function fillProfileForm() {
     nameInput.value = profileTitle.textContent;
@@ -110,7 +109,6 @@ document.querySelector('.profile__edit-button').addEventListener('click', () => 
     fillProfileForm();
     openModal(profilePopup);
 });
-
 
 // Обработчик «отправки» формы редактирования профиля
 function handleProfileFormSubmit(evt) {
@@ -126,27 +124,20 @@ function handleProfileFormSubmit(evt) {
     closeModal(profilePopup); 
 }
 
-// Прикрепляем обработчик к форме
+// Прикрепляем обработчик к форме редактирования профиля
 profileFormElement.addEventListener('submit', handleProfileFormSubmit);
 
-
-
-
-
-
-
-//ФОРМА КАРТОЧКИ
+// ФОРМА КАРТОЧКИ
 const cardFormElement = cardPopup.querySelector('.popup__form');
 const cardNameInput = cardFormElement.querySelector('.popup__input_type_card-name');
 const cardLinkInput = cardFormElement.querySelector('.popup__input_type_url');
 
-
+// Обработчик открытия поп-апа добавления карточки
 document.querySelector('.profile__add-button').addEventListener('click', () => {
-    cardNameInput.value = '';
-    cardLinkInput.value = '';
-    openModal(cardPopup);
+    cardNameInput.value = ''; // Очищаем поле имени карточки
+    cardLinkInput.value = ''; // Очищаем поле ссылки на изображение
+    openModal(cardPopup); // Открываем поп-ап добавления карточки
 });
-
 
 // Обработчик «отправки» формы добавления карточки
 function handleCardFormSubmit(evt) {
@@ -162,7 +153,14 @@ function handleCardFormSubmit(evt) {
     const newCardElement = createCard(cardData);
     cardsContainer.prepend(newCardElement);
 
+    // Закрываем поп-ап после добавления карточки
     closeModal(cardPopup);
 }
 
+// Прикрепляем обработчик к форме добавления карточки
 cardFormElement.addEventListener('submit', handleCardFormSubmit);
+
+// Добавление класса для анимации при загрузке приложения
+popups.forEach(popup => {
+  popup.classList.add('popup_is-animated'); // Добавляем класс для анимации при открытии/закрытии
+});
