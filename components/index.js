@@ -6,7 +6,7 @@ import { openModal, closeModal } from "./modal.js";
 
 
 
-const cardsContainer = document.querySelector('.places__list');
+export const cardsContainer = document.querySelector('.places__list');
 export const cardTemplate = document.querySelector('#card-template').content;
 
 export const imagePopup = document.querySelector('.popup_type_image');
@@ -16,17 +16,7 @@ export const popupCaption = imagePopup.querySelector('.popup__caption');
 
 
 // @todo: Функция удаления карточки
-function removeCard(evt) {
-    const cardItem = evt.target.closest('.card'); 
-    if (cardItem) {
-        cardsContainer.removeChild(cardItem);
-    }
-}
 
-function toggleLike(evt) {
-    const likeButton = evt.target;
-    likeButton.classList.toggle('card__like-button_is-active');
-}
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(card => {

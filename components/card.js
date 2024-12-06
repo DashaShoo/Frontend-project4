@@ -1,4 +1,4 @@
-import { cardTemplate, imagePopup, popupImage, popupCaption } from "./index.js";
+import { cardTemplate, imagePopup, popupImage, popupCaption, cardsContainer } from "./index.js";
 import { openModal } from "./modal.js";
 
 
@@ -31,4 +31,17 @@ export function createCard(cardData) {
     });
 
     return newCard;
+}
+
+
+function removeCard(evt) {
+    const cardItem = evt.target.closest('.card'); 
+    if (cardItem) {
+        cardsContainer.removeChild(cardItem);
+    }
+}
+
+function toggleLike(evt) {
+    const likeButton = evt.target;
+    likeButton.classList.toggle('card__like-button_is-active');
 }
