@@ -1,9 +1,11 @@
 import { cardTemplate, imagePopup, popupImage, popupCaption, cardsContainer } from "./index.js";
 import { openModal } from "./modal.js";
+import { deleteCard, likeCard, dislikeCard } from './api.js';  
+import { currentUser } from './index.js'; // Импорт переменной
 
 
 // @todo: Функция создания карточки
-export function createCard(cardData) {
+export function createCardElement(cardData) {
     const newCard = cardTemplate.cloneNode(true);
 
     const cardImage = newCard.querySelector('.card__image');
@@ -22,8 +24,20 @@ export function createCard(cardData) {
         openModal(imagePopup);
     });
 
+    // Проверка, является ли текущий пользователь владельцем карточки
+    if (cardData.owner._id === currentUser._id) {
+        deleteButton.style.display = 'block'; // Показываем кнопку удаления
+    } else {
+        deleteButton.style.display = 'none'; // Скрываем кнопку удаления
+    }
+
     deleteButton.addEventListener('click', (evt) => {
-        removeCard(evt);
+        const cardId = cardData._id; // Получаем ID карточки из данных
+        deleteCard(cardId) // Передаем ID в функцию deleteCard
+            .then(() => {
+                removeCard(evt); // Удаляем карточку из интерфейса
+            })
+            .catch(err => console.error('Ошибка при удалении карточки:', err));
     });
 
     likeButton.addEventListener('click', (evt) => {

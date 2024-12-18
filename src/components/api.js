@@ -6,6 +6,14 @@ const config = {
   },
 }
 
+
+function checkResponse(res) { 
+    if (res.ok) { 
+        return res.json(); 
+    } 
+    return Promise.reject(`Ошибка: ${res.status}`); 
+} 
+
 export function getUserInfo() { 
     return fetch(`${config.baseUrl}/users/me`, { 
         headers: { 
@@ -79,11 +87,4 @@ export function dislikeCard(cardId) {
             Authorization: config.headers.authorization, 
         } 
     }).then(res => checkResponse(res)); 
-} 
-
-function checkResponse(res) { 
-    if (res.ok) { 
-        return res.json(); 
-    } 
-    return Promise.reject(`Ошибка: ${res.status}`); 
 } 
