@@ -97,6 +97,8 @@ profileFormElement.addEventListener('submit', handleProfileFormSubmit);
 const cardFormElement = cardPopup.querySelector('.popup__form');
 const cardNameInput = cardFormElement.querySelector('.popup__input_type_card-name');
 const cardLinkInput = cardFormElement.querySelector('.popup__input_type_url');
+const cardSubmitButton = cardFormElement.querySelector('.popup__button');
+const profileSubmitButton = profileFormElement.querySelector('.popup__button');
 
 document.querySelector('.profile__add-button').addEventListener('click', () => {
     cardNameInput.value = '';
@@ -156,8 +158,6 @@ editAvatarButton.addEventListener('click', () => {
     }
     openModal(avatarPopup);
 })
-console.log(avatarForm)
-console.log(closeAvatarButton)
 closeAvatarButton.addEventListener('click', () => closeModal(avatarPopup));
 avatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
@@ -189,19 +189,29 @@ function handleProfileFormSubmit(evt) {
     const nameValue = nameInput.value;
     const jobValue = jobInput.value;
 
+    profileSubmitButton.textContent = 'Сохранение...'; 
+    profileSubmitButton.disabled = true; 
+
     updateUserInfo(nameValue, jobValue)
         .then(updatedUser => {
             profileTitle.textContent = updatedUser.name;
             profileDescription.textContent = updatedUser.about;
             closeModal(profilePopup);
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => { 
+            profileSubmitButton.textContent = 'Сохранить'; 
+            profileSubmitButton.disabled = false; 
+        }); 
 }
 
 
 
 function handleCardFormSubmit(evt) {
     evt.preventDefault();
+
+    cardSubmitButton.textContent = 'Сохранение...'; 
+    cardSubmitButton.disabled = true; 
 
     const cardData = {
         name: cardNameInput.value,
@@ -214,7 +224,11 @@ function handleCardFormSubmit(evt) {
             cardsContainer.prepend(newCardElement);
             closeModal(cardPopup);
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => { 
+            cardSubmitButton.textContent = 'Сохранить'; 
+            cardSubmitButton.disabled = false; 
+        }); 
 }
 
 
